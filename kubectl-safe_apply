@@ -11,12 +11,22 @@ import os, sys, yaml, argparse
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-f", "--filename", nargs="+")
+parser.add_argument("-k", "--kustomize", action='store_const', const=True)
+parser.add_argument("-R", "--recursive", action='store_const', const=True)
 parser.add_argument("--context")
 args, unknown_args = parser.parse_known_intermixed_args()
 
 import subprocess
 
 ctx = args.context or subprocess.run(["kubectl", "config", "current-context"], capture_output=True).stdout.decode().strip()
+
+if not args.filename:
+    print("No filename(s) specified. Call 'kubectl safe-apply' just as you would normally call 'kubectl apply'.")
+    sys.exit(1)
+
+if args.kustomize or args.recursive:
+    print("--kustomize (-k) and --recursive (-R) options not yet supported by safe-apply")
+    sys.exit(1)
 
 for file in args.filename:
     try:
