@@ -8,12 +8,15 @@ A plugin for kubectl that matches a special annotation in applied YAML with the 
 
 ### Linux and MacOS
 
-* Put `kubectl-safe_apply` somewhere on your path
-* Make it executable (`chmod +x /path/to/kubectl-safe_apply`)
+* Put `kubectl-safe_apply` and `kubectl-safe_delete` somewhere on your path
 
 ### Windows
 
-* Put `kubectl-safe_apply` and `kubectl-safe_apply.cmd` somewhere on your path.
+* Put the following somewhere on your path:
+  * `kubectl-safe_apply`
+  * `kubectl-safe_apply.cmd`
+  * `kubectl-safe_delete`
+  * `kubectl-safe_delete.cmd`
 
 ## Usage
 
@@ -53,7 +56,7 @@ A plugin for kubectl that matches a special annotation in applied YAML with the 
 
 ## Notes
 
-* All arguments to `kubectl safe-apply` are passed through as-is to `kubectl apply`, assuming the context validation succeeds.
+* All arguments to `kubectl safe-apply` are passed through as-is to `kubectl apply`, assuming the context validation succeeds. Similarly, arguments to `kubectl safe-delete` are passed to `kubectl delete`.
 
 * If any objects in the YAML file don't have the correct context annotation, nothing will be applied.
 

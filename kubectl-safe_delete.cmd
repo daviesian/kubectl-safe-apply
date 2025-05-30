@@ -1,0 +1,1 @@
+@bash -ilc "kubectl-safe_delete %*"
