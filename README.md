@@ -59,7 +59,7 @@ A plugin for kubectl that matches a special annotation in applied YAML with the 
 
 * The `safe-apply/require-context` annotation **must** be present for the apply to succeed, as demonstrated above. This means you can't accidentally apply a normal YAML file to an important cluster just by forgetting to add the annotation. If you're using `safe-apply`, you can trust that every object being applied explicitly names the context you're applying it to.
 
-* You don't have to use stateful context selection. `--cluster` will also work:
+* You don't have to use stateful context selection. `--context` will also work:
 
     ```bash
     $ kubectx default
