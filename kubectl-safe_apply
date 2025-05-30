@@ -1,0 +1,36 @@
+#!/usr/bin/env -S uv run --script
+
+# /// script
+# dependencies = [
+#   "PyYaml",
+# ]
+# ///
+
+import os, sys, yaml, argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("-f", "--filename", nargs="+")
+parser.add_argument("--context")
+args, unknown_args = parser.parse_known_intermixed_args()
+
+import subprocess
+
+ctx = args.context or subprocess.run(["kubectl", "config", "current-context"], capture_output=True).stdout.decode().strip()
+
+for file in args.filename:
+    try:
+        with open(file) as f:
+            for doc in yaml.safe_load_all(f):
+                required_ctx = doc.get("metadata",{}).get("annotations",{}).get("safe-apply/require-context")
+                if not required_ctx:
+                    print(f"Attempting to apply {doc.get("kind")} '{doc.get("metadata",{}).get("name", "<unknown object>")}' without a safe-apply/require-context annotation. Aborting.")
+                    sys.exit(1)
+                if (isinstance(required_ctx, str) and ctx != required_ctx) or (isinstance(required_ctx, list) and ctx not in required_ctx):
+                    print(f"Attempting to apply to incorrect context for {doc.get("kind")} '{doc.get("metadata",{}).get("name", "<unknown object>")}'. Current: {ctx}, required: {required_ctx}")
+                    sys.exit(1)
+    except FileNotFoundError:
+        print(f"File not found: {file}")
+        sys.exit(1)
+
+subprocess.run(["kubectl", "apply", *sys.argv[1:]])
