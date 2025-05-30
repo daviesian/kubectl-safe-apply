@@ -9,6 +9,7 @@ A plugin for kubectl that matches a special annotation in applied YAML with the 
 ### Linux and MacOS
 
 * Put `kubectl-safe_apply` and `kubectl-safe_delete` somewhere on your path
+* Make them executable (`chmod +x /path/to/kubectl-safe_*`)
 
 ### Windows
 
